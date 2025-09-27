@@ -8,7 +8,9 @@
 // @grant        none
 // ==/UserScript==
 
-// issue: 1. The data has to be collected by user manual click the bell button, since there are Shadow DOM s in the Brightspace page, it would be better to have the API to collect the data.
+// issue: 1. The data has to be collected by user manual click the bell button, 
+//          since there are Shadow DOM s in the Brightspace page, 
+//          it would be better to have the API to collect the data.
 
 
 (function() {
@@ -27,6 +29,10 @@
         }
 
         observer = new MutationObserver((mutations) => {
+            // The MutationObserver interface provides the ability to watch for changes being made to the DOM tree. 
+            // https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+            // When we click the Bell btn, there is a list insert in the DOM, 
+            // all the list items has a <a> with class: d2l-datalist-item-actioncontrol
             const notificationItems = document.querySelectorAll('.d2l-datalist-item-actioncontrol');
 
             if (notificationItems.length > 0 && !isCollecting) {
@@ -57,6 +63,7 @@
     }
 
     function isFuture(dateString) {
+        // check if this assignment due time is in the future
         const dueDate = parseDueDate(dateString);
         if (!dueDate || isNaN(dueDate.getTime())) return true; // Keep if can't parse
 
