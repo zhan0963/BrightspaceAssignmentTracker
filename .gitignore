@@ -1,0 +1,47 @@
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+build/
+out/
+public/build/ # For frameworks that build into a public/build directory
+.next/ # Next.js specific build output
+.nuxt/ # Nuxt.js specific build output
+.vite/ # Vite specific build output
+
+# Editor directories and files
+.vscode/ # VS Code specific settings (can be included if shared settings are desired, but often ignored)
+!.vscode/extensions.json # Exception to include extensions.json if needed
+.idea/ # IntelliJ IDEA specific settings
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Test results
+coverage/
+.nyc_output/
+
+# Temporary files
+tmp/
+*.tmp
+*.bak
+*.swp
