@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BrightspaceAssignmentTracker
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  Collects notification data after manual click - opens links in new tabs
 // @author       Jimmy Z.
 // @match        https://brightspace.algonquincollege.com/d2l/home
@@ -11,6 +11,11 @@
 // issue: 1. The data has to be collected by user manual click the bell button, 
 //          since there are Shadow DOM s in the Brightspace page, 
 //          it would be better to have the API to collect the data.
+
+// issue: 2. Profs always want to change the due date, after they change it, there will be a new due on item with a new date
+//        in version 0.2, we didn't handle the situation, there will have more than 1 item with the same name and diff due date
+//        resolve this issue in version 0.3 that we compare the item.name and item.date, 
+//        if they have the same name but different date, we use the new Item to replace the old item in the cache
 
 
 (function() {
@@ -108,7 +113,9 @@
                 dateText = dateElement ? (dateElement.getAttribute('title') || dateElement.textContent.trim()) : '';
             }
 
-            const itemId = `${text}_${dateText}`.replace(/\s+/g, '_');
+            //const itemId = `${text}_${dateText}`.replace(/\s+/g, '_');
+            let topic = text.match(/"([^"]+)"/);
+            const itemId = topic ? topic[1] : text; // change itemId to name, the "" part, because sometimes prof will change the same assigment a new deadline
 
             if (text.includes('due on')) {
                 // Only add future assignments
@@ -122,6 +129,10 @@
                         id: itemId
                     };
 
+                    // replace current assignment if the id is the same but the time is diff
+                    newData = newData.assignment.map(item => (item.id === newItem.id && item.date != newItem.date) ? newItem : item)
+
+                    // add new assignment
                     if (!newData.assignments.some(item => item.id === newItem.id)) {
                         newData.assignments.push(newItem);
                         console.log('Added assignment');
